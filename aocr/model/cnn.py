@@ -133,6 +133,10 @@ class CNN(object):
         net = tf.add(input_tensor, (-128.0))
         net = tf.multiply(net, (1/128.0))
 
+        # net = ConvRelu(net, 32, (3, 3), 'conv_conv0')
+        # net = max_2x2pool(net, 'conv_pool0')
+        # print("cnn layer 1 tensor size : ", net)
+
         net = ConvRelu(net, 64, (3, 3), 'conv_conv1')
         net = max_2x2pool(net, 'conv_pool1')
 
@@ -146,9 +150,13 @@ class CNN(object):
         net = ConvReluBN(net, 512, (3, 3), 'conv_conv5', is_training)
         net = ConvRelu(net, 512, (3, 3), 'conv_conv6')
         net = max_2x1pool(net, 'conv_pool4')
-
+        
         net = ConvReluBN(net, 512, (2, 2), 'conv_conv7', is_training)
         net = max_2x1pool(net, 'conv_pool5')
+
+        net = ConvRelu(net, 512, (3, 3), 'conv_conv8')
+        net = max_2x2pool(net, 'conv_pool6')
+
         net = dropout(net, is_training)
 
         net = tf.squeeze(net, axis=1)
